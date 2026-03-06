@@ -758,6 +758,28 @@ Mandatory 2FA (Google Authenticator / TOTP):
   - generate: `openssl rand -base64 32`
 - `MFA_TOTP_ISSUER` controls the issuer label shown in authenticator apps (default: `API Security Platform`).
 - `MFA_TOTP_SKEW_STEPS` allowed time skew steps (0–3, default 1). Each step is 30 seconds.
+
+Machine-readable exports (CI/CD + governance integrations):
+
+- **SARIF (scan)**
+  - `GET /api/scans/{scanId}/sarif` (session / API token)
+  - `GET /ci/gate/{scanId}/sarif` (CI gate token)
+  - optional: `?limit=20000`
+
+- **JUnit-ish gate result (CI gate)**
+  - `GET /api/ci/gate/{scanId}/junit` (session / API token)
+  - `GET /ci/gate/{scanId}/junit` (CI gate token)
+  - optional: `?failOn=high` (stricter than policy)
+
+- **CSV export (findings)**
+  - `GET /api/scans/{scanId}/findings.csv` (session / API token)
+  - `GET /ci/gate/{scanId}/findings.csv` (CI gate token)
+  - optional: `?includeClosed=true&limit=20000`
+
+- **JSON snapshots (company posture / scorecard)**
+  - `GET /api/posture/snapshot.json` (download-friendly)
+  - `GET /api/scorecard/snapshot.json` (download-friendly)
+  - `super_admin` can scope using `?companyId=<uuid>`
 - `MFA_TOTP_REQUIRE_FOR_SSO=true` (optional) enables **step-up MFA after SSO** (OIDC/SAML). If enabled, users will be redirected to the login MFA panel after SSO and must enter a TOTP code before a session is issued.
 
 Admin ops:
